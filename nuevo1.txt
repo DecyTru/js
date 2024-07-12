@@ -1,0 +1,139 @@
+# Lista para almacenar usuarios y contraseñas
+usuarios = []
+# Lista para almacenar las apuestas
+apuestas = []
+
+
+def registrar_usuario(usuario, contrasena):
+    usuarios.append((usuario, contrasena))
+    print("Usuario registrado correctamente.")
+
+
+def ingresar_apuesta(nombre, monto, pais):
+    apuestas.append((nombre, monto, pais))
+    print(f"Apuesta de {nombre} por ${monto} a {pais} ingresada correctamente.")
+
+
+def consultar_apuestas():
+    if len(apuestas) == 0:
+        print("No hay apuestas registradas.")
+    else:
+        print("Apuestas registradas:")
+        for index, (nombre, monto, pais) in enumerate(apuestas, start=1):
+            print(f"{index}. {nombre}: ${monto} a {pais}")
+
+
+def borrar_apuesta():
+    if len(apuestas) == 0:
+        print("No hay apuestas para borrar.")
+    else:
+        print("Apuestas registradas:")
+        for index, (nombre, monto, pais) in enumerate(apuestas, start=1):
+            print(f"{index}. {nombre}: ${monto} a {pais}")
+
+        opcion = input(
+            "Seleccione el número de la apuesta que desea borrar (o '0' para cancelar): "
+        )
+        try:
+            opcion = int(opcion)
+            if 1 <= opcion <= len(apuestas):
+                apuestas.pop(opcion - 1)
+                print("Apuesta borrada correctamente.")
+            elif opcion == 0:
+                print("Operación cancelada.")
+            else:
+                print("Número de apuesta fuera de rango.")
+        except ValueError:
+            print("Entrada inválida. Debe ingresar un número.")
+
+
+def menu_principal(usuario):
+    while True:
+        print(f"\nBienvenido, {usuario}!")
+        print("1. Ingresar apuesta")
+        print("2. Consultar apuestas")
+        print("3. Borrar apuesta")
+        print("4. Cerrar sesión")
+
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            nombre = input("Ingrese nombre del apostador: ")
+            monto = input("Ingrese monto de la apuesta: ")
+            print("Equipos\n1. Argentina\n2. Uruguay\n3. Colombia\n4. Canadá")
+            seleccion = input("Ingrese el número de país: ")
+
+            if seleccion == "1":
+                pais = "Argentina"
+            elif seleccion == "2":
+                pais = "Uruguay"
+            elif seleccion == "3":
+                pais = "Colombia"
+            elif seleccion == "4":
+                pais = "Canadá"
+            else:
+                print("Selección inválida. Volviendo al menú principal.")
+                continue
+
+            try:
+                monto = float(monto)
+                ingresar_apuesta(nombre, monto, pais)
+            except ValueError:
+                print("Monto inválido. Debe ingresar un número.")
+
+        elif opcion == "2":
+            consultar_apuestas()
+
+        elif opcion == "3":
+            borrar_apuesta()
+
+        elif opcion == "4":
+            print(f"Cerrando sesión de {usuario}.")
+            break
+
+        else:
+            print("Opción no válida. Intente nuevamente.")
+
+
+def iniciar_sesion():
+    while True:
+        usuario = input("Ingrese nombre de usuario: ")
+        contrasena = input("Ingrese contraseña: ")
+
+        # Verificar usuario y contraseña
+        for u, p in usuarios:
+            if u == usuario and p == contrasena:
+                print("Inicio de sesión exitoso.")
+                menu_principal(usuario)
+                return
+
+        print("Usuario o contraseña incorrectos.")
+        opcion = input("¿Desea intentarlo de nuevo? (s/n): ")
+        if opcion.lower() != 's':
+            print("Saliendo del programa.")
+            return
+
+
+# Ejemplo de uso
+if __name__ == "__main__":
+    while True:
+        print("\n1. Registrar usuario")
+        print("2. Iniciar sesión")
+        print("3. Salir")
+
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            usuario = input("Ingrese nombre de usuario: ")
+            contrasena = input("Ingrese contraseña: ")
+            registrar_usuario(usuario, contrasena)
+
+        elif opcion == "2":
+            iniciar_sesion()
+
+        elif opcion == "3":
+            print("Gracias")
+            break
+
+        else:
+            print("Opción no válida. Intente nuevamente.")
